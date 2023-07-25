@@ -1,0 +1,74 @@
+<style>
+  .avatar-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    background-color: #e5e5e5;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.15s ease;
+  }
+
+  .avatar:hover {
+    opacity: 0.6;
+  }
+</style>
+
+<h2>UI Faces</h2>
+<h3>Choose your avatar</h3>
+
+<div class="avatar-container">
+  <div
+    class="avatar"
+    style="background-image: url(https://source.unsplash.com/LaK153ghdig/48x48)"
+  ></div>
+  <div
+    class="avatar"
+    style="background-image: url(https://source.unsplash.com/d1UPkiFd04A/48x48)"
+  ></div>
+  <div
+    class="avatar"
+    style="background-image: url(https://source.unsplash.com/3TLl_97HNJo/48x48)"
+  ></div>
+  <div
+    class="avatar"
+    style="background-image: url(https://source.unsplash.com/_cvwXhGqG-o/48x48)"
+  ></div>
+  <div
+    class="avatar"
+    style="background-image: url(https://source.unsplash.com/d0peGya6R5Y/48x48)"
+  ></div>
+</div>
+
+<button id="insert">Apply avatar</button>
+
+<!-- <p>Count: <input id="count" value="5" /></p>
+<button id="create">Create</button> -->
+<button id="close">Close</button>
+
+<script>
+  document.getElementById("insert").onclick = () => {
+    parent.postMessage({ pluginMessage: { type: "insert-avatar" } }, "*");
+  };
+
+  // document.getElementById("create").onclick = () => {
+  //   const textbox = document.getElementById("count");
+  //   const count = parseInt(textbox.value, 10);
+  //   parent.postMessage(
+  //     { pluginMessage: { type: "create-rectangles", count } },
+  //     "*"
+  //   );
+  // };
+
+  document.getElementById("close").onclick = () => {
+    parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+  };
+</script>

@@ -1,0 +1,16 @@
+{
+  "name": "ui-faces",
+  "id": "1265591234881602396",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "ui": "ui.html",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://source.unsplash.com",
+      "https://images.unsplash.com"
+    ]
+  }
+}
