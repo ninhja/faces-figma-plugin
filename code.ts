@@ -71,9 +71,4 @@ figma.ui.onmessage = (msg) => {
         });
     }
   }
-
-  // You can close the plugin when you're done by clicking the Close button.
-  if (msg.type === "close") {
-    figma.closePlugin();
-  }
 };
