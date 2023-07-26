@@ -6,8 +6,8 @@
   }
 
   .avatar {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background-color: #e5e5e5;
     border-radius: 50%;
     padding: 0;
@@ -15,58 +15,72 @@
     background-size: cover;
     background-position: center;
     transition: all 0.15s ease;
+    border: 2px solid rgba(255, 255, 255, 0);
   }
 
   .avatar:hover {
     opacity: 0.6;
+  }
+
+  .avatar.selected {
+    border: 2px solid #003cff;
   }
 </style>
 
 <h2>UI Faces</h2>
 <h3>Choose your avatar</h3>
 
-<div class="avatar-container">
-  <div
-    class="avatar"
-    style="background-image: url(https://source.unsplash.com/LaK153ghdig/48x48)"
-  ></div>
-  <div
-    class="avatar"
-    style="background-image: url(https://source.unsplash.com/d1UPkiFd04A/48x48)"
-  ></div>
-  <div
-    class="avatar"
-    style="background-image: url(https://source.unsplash.com/3TLl_97HNJo/48x48)"
-  ></div>
-  <div
-    class="avatar"
-    style="background-image: url(https://source.unsplash.com/_cvwXhGqG-o/48x48)"
-  ></div>
-  <div
-    class="avatar"
-    style="background-image: url(https://source.unsplash.com/d0peGya6R5Y/48x48)"
-  ></div>
-</div>
+<div class="avatar-container"></div>
 
-<button id="insert">Apply avatar</button>
-
-<!-- <p>Count: <input id="count" value="5" /></p>
-<button id="create">Create</button> -->
+<button id="insert">Insert selected avatar</button>
+<button id="insert">Insert random avatar</button>
 <button id="close">Close</button>
 
 <script>
-  document.getElementById("insert").onclick = () => {
-    parent.postMessage({ pluginMessage: { type: "insert-avatar" } }, "*");
-  };
+  const avatars = [
+    { src: "https://source.unsplash.com/d0peGya6R5Y/w=400" },
+    { src: "https://source.unsplash.com/d1UPkiFd04A/w=400" },
+    { src: "https://source.unsplash.com/3TLl_97HNJo/w=400" },
+    { src: "https://source.unsplash.com/LaK153ghdig/w=400" },
+    { src: "https://source.unsplash.com/_cvwXhGqG-o/w=400" },
+  ];
 
-  // document.getElementById("create").onclick = () => {
-  //   const textbox = document.getElementById("count");
-  //   const count = parseInt(textbox.value, 10);
-  //   parent.postMessage(
-  //     { pluginMessage: { type: "create-rectangles", count } },
-  //     "*"
-  //   );
-  // };
+  let selectedAvatarSrc = null;
+
+  // create all of the avatar buttons
+  const avatarContainer = document.querySelector(".avatar-container");
+  avatars.forEach((avatar, index) => {
+    //create the button based on the avatar image
+    const button = document.createElement("a");
+    button.classList.add("avatar");
+    button.style.backgroundImage = `url(${avatar.src}`;
+    button.href = "#";
+
+    // add the avatar button to the avatar container
+    avatarContainer.appendChild(button);
+  });
+
+  // add click event listeners for each avatar button
+  const avatarButtons = document.querySelectorAll(".avatar");
+  avatarButtons.forEach((avatarButton) => {
+    avatarButton.addEventListener("click", function (event) {
+      avatarButtons.forEach((button) => button.classList.remove("selected"));
+      avatarButton.classList.add("selected");
+      console.log(avatarButton);
+
+      const src = avatarButton.style.backgroundImage.slice(5, -2);
+      selectedAvatarSrc = src;
+
+      event.preventDefault();
+    });
+  });
+
+  document.getElementById("insert").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "insert-avatar", selectedAvatarSrc } },
+      "*"
+    );
+  };
 
   document.getElementById("close").onclick = () => {
     parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");

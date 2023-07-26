@@ -3,13 +3,13 @@
 // You can access browser APIs in the <script> tag inside "ui.html" which has a
 // full browser environment (See https://www.figma.com/plugin-docs/how-plugins-run).
 
-const images = [
-  { src: "https://source.unsplash.com/d0peGya6R5Y/w=400" },
-  { src: "https://source.unsplash.com/d1UPkiFd04A/w=400" },
-  { src: "https://source.unsplash.com/3TLl_97HNJo/w=400" },
-  { src: "https://source.unsplash.com/LaK153ghdig/w=400" },
-  { src: "https://source.unsplash.com/_cvwXhGqG-o/w=400" },
-];
+// const images = [
+//   { src: "https://source.unsplash.com/d0peGya6R5Y/w=400" },
+//   { src: "https://source.unsplash.com/d1UPkiFd04A/w=400" },
+//   { src: "https://source.unsplash.com/3TLl_97HNJo/w=400" },
+//   { src: "https://source.unsplash.com/LaK153ghdig/w=400" },
+//   { src: "https://source.unsplash.com/_cvwXhGqG-o/w=400" },
+// ];
 
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__);
@@ -50,7 +50,7 @@ figma.ui.onmessage = (msg) => {
 
       // Get an image from a URL.
       figma
-        .createImageAsync(images[2].src)
+        .createImageAsync(msg.selectedAvatarSrc)
         .then(async (image: Image) => {
           // Render the image by filling the shapes.
           const imageFills = [
