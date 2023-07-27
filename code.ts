@@ -16,7 +16,7 @@ const getSelectedShapes = () => {
 
 // This shows the HTML page in "ui.html".
 // We can also specify the width, height and title of the plugin window, among other options
-figma.showUI(__html__, { width: 220, height: 350, title: "UI Faces Demo" });
+figma.showUI(__html__, { width: 220, height: 316, title: "UI Faces Demo" });
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
 // callback. The callback will be passed the "pluginMessage" property of the
@@ -35,7 +35,9 @@ figma.ui.onmessage = (msg) => {
         "Please select an avatar first, or apply a random avatar instead!"
       );
     } else {
-      figma.notify("Applying avatar...");
+      // Display a loading message, and save it in a variable so that we can
+      // remove it once the avatar images are successfully applied.
+      const loadingMessage = figma.notify("Applying avatar...");
 
       // Get the avatar image from its Unsplash URL
       figma
@@ -54,6 +56,9 @@ figma.ui.onmessage = (msg) => {
           shapes.forEach((shape) => {
             shape.fills = imageFills;
           });
+
+          // remove the loading message once the images have fully loaded
+          loadingMessage.cancel();
         })
         .catch((error: any) => {
           console.log(error);
