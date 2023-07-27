@@ -1,13 +1,14 @@
 <style>
   .avatar-container {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
+    margin: 16px 0px;
   }
 
   .avatar {
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     background-color: #e5e5e5;
     border-radius: 50%;
     padding: 0;
@@ -15,7 +16,7 @@
     background-size: cover;
     background-position: center;
     transition: all 0.15s ease;
-    border: 2px solid rgba(255, 255, 255, 0);
+    border: 3px solid rgb(255, 255, 255);
   }
 
   .avatar:hover {
@@ -23,26 +24,44 @@
   }
 
   .avatar.selected {
-    border: 2px solid #003cff;
+    border: 3px solid #116cd6;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    height: 32px;
+    margin-bottom: 8px;
+
+    text-align: center;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    line-height: 1;
+
+    background: #116cd6;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+
+  button:hover {
+    background: #3292ff;
   }
 </style>
 
-<h2>UI Faces</h2>
-<h3>Choose your avatar</h3>
-
 <div class="avatar-container"></div>
-
-<button id="insert">Insert selected avatar</button>
-<button id="insert">Insert random avatar</button>
+<button id="apply-selected-avatar" type="submit">Apply selected avatar</button>
+<button id="apply-random-avatar" type="submit">Apply random avatar</button>
 
 <script>
   const avatars = [
-    { src: "https://source.unsplash.com/d0peGya6R5Y/w=400" },
+    { src: "https://source.unsplash.com/nWdhpUrXxYY/w=400" },
     { src: "https://source.unsplash.com/d1UPkiFd04A/w=400" },
     { src: "https://source.unsplash.com/3TLl_97HNJo/w=400" },
-    { src: "https://source.unsplash.com/nWdhpUrXxYY/w=400" },
     { src: "https://source.unsplash.com/mJsYfuZV_dA/w=400" },
     { src: "https://source.unsplash.com/LaK153ghdig/w=400" },
+    { src: "https://source.unsplash.com/d0peGya6R5Y/w=400" },
     { src: "https://source.unsplash.com/_cvwXhGqG-o/w=400" },
     { src: "https://source.unsplash.com/hh3ViD0r0Rc/w=400" },
     { src: "https://source.unsplash.com/jFAG_ixCrsM/w=400" },
@@ -50,37 +69,58 @@
 
   let selectedAvatarSrc = null;
 
-  // create all of the avatar buttons
+  // create all of the avatar button tags in the DOM
   const avatarContainer = document.querySelector(".avatar-container");
   avatars.forEach((avatar, index) => {
-    //create the button based on the avatar image
+    // create the button as an anchor tag
     const button = document.createElement("a");
-    button.classList.add("avatar");
-    button.style.backgroundImage = `url(${avatar.src}`;
     button.href = "#";
+    button.classList.add("avatar");
+    button.style.backgroundImage = `url(${avatar.src})`;
 
     // add the avatar button to the avatar container
     avatarContainer.appendChild(button);
   });
 
-  // add click event listeners for each avatar button
-  const avatarButtons = document.querySelectorAll(".avatar");
-  avatarButtons.forEach((avatarButton) => {
-    avatarButton.addEventListener("click", function (event) {
-      avatarButtons.forEach((button) => button.classList.remove("selected"));
-      avatarButton.classList.add("selected");
-      console.log(avatarButton);
+  // add click event listeners for each button in the avatar container
+  const buttons = document.querySelectorAll(".avatar");
+  buttons.forEach((button) => {
+    button.addEventListener("click", function (event) {
+      buttons.forEach((button) => button.classList.remove("selected"));
+      button.classList.add("selected");
 
-      const src = avatarButton.style.backgroundImage.slice(5, -2);
-      selectedAvatarSrc = src;
+      const imageURL = button.style.backgroundImage.slice(5, -2);
+      console.log(imageURL);
+      selectedAvatarSrc = imageURL;
 
       event.preventDefault();
     });
   });
 
-  document.getElementById("insert").onclick = () => {
+  document.getElementById("apply-selected-avatar").onclick = () => {
     parent.postMessage(
-      { pluginMessage: { type: "insert-avatar", selectedAvatarSrc } },
+      {
+        pluginMessage: {
+          type: "apply-avatar",
+          imageSrc: selectedAvatarSrc,
+        },
+      },
+      "*"
+    );
+  };
+
+  document.getElementById("apply-random-avatar").onclick = () => {
+    // choose a random avatar from the list of avatars, and get its src URL
+    const randomAvatarSrc =
+      avatars[Math.floor(Math.random() * avatars.length)].src;
+
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "apply-avatar",
+          imageSrc: randomAvatarSrc,
+        },
+      },
       "*"
     );
   };
